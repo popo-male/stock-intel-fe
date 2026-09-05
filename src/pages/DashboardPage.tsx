@@ -121,7 +121,7 @@ export const DashboardPage: React.FC = () => {
           <>
             <StatCard
               title="Market Sentiment"
-              value={summary.overall_market_sentiment !== null ? `${summary.overall_market_sentiment > 0 ? '+' : ''}${summary.overall_market_sentiment}` : '--'}
+              value={summary.overall_market_sentiment !== null ? `${summary.overall_market_sentiment > 0 ? '+' : ''}${Number(summary.overall_market_sentiment).toFixed(2)}` : '--'}
               subtext={`${summary.total_articles} articles analyzed (${summary.overall_sentiment_label || 'neutral'})`}
               icon={Activity}
             />
@@ -129,7 +129,7 @@ export const DashboardPage: React.FC = () => {
               title="Top Market Gainer"
               value={summary.todays_biggest_gainer?.ticker || '--'}
               changePct={summary.todays_biggest_gainer?.price_change_pct}
-              subtext={summary.todays_biggest_gainer?.close_price ? `$${summary.todays_biggest_gainer.close_price.toFixed(2)} Close` : undefined}
+              subtext={summary.todays_biggest_gainer?.close_price ? `$${Number(summary.todays_biggest_gainer.close_price).toFixed(2)} Close` : undefined}
               icon={TrendingUp}
             />
             <StatCard
@@ -171,53 +171,56 @@ export const DashboardPage: React.FC = () => {
                     key={item.ticker}
                     to={`/stocks/${item.ticker}`}
                     onClick={() => setSelectedTicker(item.ticker)}
-                    className="bg-surface border border-border-subtle hover:border-accent-primary/60 rounded-xl p-4 shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+                    className="bg-surface border border-border-subtle hover:border-accent-primary/60 rounded-xl p-4 shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between overflow-hidden"
                   >
                     <div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="font-mono font-bold text-base text-text-primary group-hover:text-accent-primary transition-colors">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <span className="font-mono font-bold text-base text-text-primary group-hover:text-accent-primary transition-colors block leading-tight">
                             {item.ticker}
                           </span>
-                          <span className="block text-[11px] text-text-muted truncate max-w-[130px]">
+                          <span className="block text-[11px] text-text-muted truncate mt-0.5" title={item.name}>
                             {item.name}
                           </span>
                         </div>
                         {item.latest_prediction && (
-                          <PredictionBadge
-                            direction={item.latest_prediction.direction}
-                            confidence={item.latest_prediction.confidence_score}
-                            size="sm"
-                          />
+                          <div className="shrink-0">
+                            <PredictionBadge
+                              direction={item.latest_prediction.direction}
+                              confidence={item.latest_prediction.confidence_score}
+                              size="sm"
+                            />
+                          </div>
                         )}
                       </div>
 
                       <div className="flex items-baseline justify-between mt-3">
                         <span className="text-xl font-bold font-mono text-text-primary">
-                          ${item.close_price?.toFixed(2) || '--'}
+                          ${item.close_price !== undefined ? Number(item.close_price).toFixed(2) : '--'}
                         </span>
                         <span
-                          className={`text-xs font-mono font-semibold flex items-center ${
+                          className={`text-xs font-mono font-semibold flex items-center shrink-0 ${
                             isPos ? 'text-bullish' : 'text-bearish'
                           }`}
                         >
                           {isPos ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                          {item.price_change_pct ? `${Math.abs(item.price_change_pct).toFixed(2)}%` : '0.00%'}
+                          {item.price_change_pct !== undefined ? `${Math.abs(item.price_change_pct).toFixed(2)}%` : '0.00%'}
                         </span>
                       </div>
                     </div>
 
-                    <div className="mt-3 pt-3 border-t border-border-subtle flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-text-muted">24h Sent:</span>
+                    <div className="mt-3 pt-3 border-t border-border-subtle flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-[10px] text-text-muted shrink-0">24h:</span>
                         <SentimentPill
                           score={item.sentiment_24h?.avg_sentiment}
                           label={item.sentiment_24h?.label}
                           size="sm"
+                          showScore={false}
                         />
                       </div>
-                      <div className="opacity-80 group-hover:opacity-100 transition-opacity">
-                        <Sparkline data={item.sparkline_7d} width={65} height={20} />
+                      <div className="shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
+                        <Sparkline data={item.sparkline_7d} width={60} height={20} />
                       </div>
                     </div>
                   </NavLink>
@@ -236,7 +239,7 @@ export const DashboardPage: React.FC = () => {
                 Cross-Stock Sentiment Ranking
               </h2>
               <p className="text-xs text-text-muted">
-                Average FinBERT score ([-1.0, 1.0]) per tracked stock
+                Average FinBERT score ([-1.00, 1.00]) per tracked stock
               </p>
             </div>
             <span className="text-xs font-mono text-text-muted bg-surface-raised px-2 py-1 rounded">
@@ -252,7 +255,7 @@ export const DashboardPage: React.FC = () => {
                 <BarChart data={sentimentData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
                   <XAxis dataKey="ticker" stroke="var(--text-muted)" fontSize={12} tickLine={false} />
-                  <YAxis domain={[-1, 1]} stroke="var(--text-muted)" fontSize={12} tickLine={false} />
+                  <YAxis domain={[-1, 1]} stroke="var(--text-muted)" fontSize={12} tickLine={false} tickFormatter={(val) => Number(val).toFixed(2)} />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
@@ -260,7 +263,7 @@ export const DashboardPage: React.FC = () => {
                         return (
                           <div className="bg-surface border border-border-strong p-2.5 rounded-lg shadow-lg text-xs font-mono">
                             <div className="font-bold text-text-primary">{d.company_name} ({d.ticker})</div>
-                            <div className="text-accent-primary mt-1">Avg Score: {d.avg_sentiment_score > 0 ? `+${d.avg_sentiment_score}` : d.avg_sentiment_score}</div>
+                            <div className="text-accent-primary mt-1">Avg Score: {d.avg_sentiment_score > 0 ? `+${Number(d.avg_sentiment_score).toFixed(2)}` : Number(d.avg_sentiment_score).toFixed(2)}</div>
                             <div className="text-text-muted mt-0.5">Articles: {d.article_count} (Pos: {d.positive_count}, Neg: {d.negative_count})</div>
                           </div>
                         );
@@ -361,7 +364,7 @@ export const DashboardPage: React.FC = () => {
                 <th className="py-3 px-3">Ticker</th>
                 <th className="py-3 px-3">Direction</th>
                 <th className="py-3 px-3">Confidence</th>
-                <th className="py-3 px-3">Probability Distribution (UP / DOWN)</th>
+                <th className="py-3 px-3 text-center">Probability Distribution (UP / DOWN)</th>
                 <th className="py-3 px-3">24h Sentiment</th>
                 <th className="py-3 px-3 text-right">Action</th>
               </tr>
@@ -396,18 +399,24 @@ export const DashboardPage: React.FC = () => {
                     <td className="py-3 px-3 font-mono font-semibold">
                       {pred ? `${Math.round(pred.confidence_score * 100)}%` : '--'}
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="w-36 h-2.5 flex items-stretch rounded-full overflow-hidden bg-surface-raised border border-border-subtle">
-                        <div
-                          style={{ width: `${upPct}%` }}
-                          className="h-full bg-bullish transition-all duration-300"
-                          title={`UP: ${upPct}%`}
-                        />
-                        <div
-                          style={{ width: `${downPct}%` }}
-                          className="h-full bg-bearish transition-all duration-300"
-                          title={`DOWN: ${downPct}%`}
-                        />
+                    <td className="py-3 px-3 text-center">
+                      <div className="flex flex-col items-center justify-center gap-1 mx-auto max-w-[180px]">
+                        <div className="w-36 h-2.5 flex items-stretch rounded-full overflow-hidden bg-surface-raised border border-border-subtle">
+                          <div
+                            style={{ width: `${upPct}%` }}
+                            className="h-full bg-bullish transition-all duration-300"
+                            title={`UP: ${upPct}%`}
+                          />
+                          <div
+                            style={{ width: `${downPct}%` }}
+                            className="h-full bg-bearish transition-all duration-300"
+                            title={`DOWN: ${downPct}%`}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between w-36 text-[10px] font-mono">
+                          <span className="text-bullish font-semibold">{upPct}% UP</span>
+                          <span className="text-bearish font-semibold">{downPct}% DOWN</span>
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 px-3">

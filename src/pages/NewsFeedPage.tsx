@@ -21,10 +21,11 @@ export const NewsFeedPage: React.FC = () => {
 
   const initialTicker = searchParams.get('ticker') || '';
   const initialSentiment = searchParams.get('sentiment') || '';
+  const initialKeyword = searchParams.get('keyword') || '';
 
   const [selectedTicker, setSelectedTicker] = useState<string>(initialTicker);
   const [selectedSentiment, setSelectedSentiment] = useState<string>(initialSentiment);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(initialKeyword);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [articlesData, setArticlesData] = useState<PaginatedResponse<ArticleItem> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,7 +38,8 @@ export const NewsFeedPage: React.FC = () => {
           selectedTicker || undefined,
           selectedSentiment || undefined,
           currentPage,
-          10
+          10,
+          searchQuery || undefined
         );
         setArticlesData(res);
       } catch (err) {
@@ -47,7 +49,7 @@ export const NewsFeedPage: React.FC = () => {
       }
     };
     loadNews();
-  }, [selectedTicker, selectedSentiment, currentPage]);
+  }, [selectedTicker, selectedSentiment, currentPage, searchQuery]);
 
   const handleSentimentFilter = (sent: string) => {
     setSelectedSentiment(sent);
@@ -67,28 +69,27 @@ export const NewsFeedPage: React.FC = () => {
     setSearchParams(params);
   };
 
-  // Robust client-side filter fallback ensuring instant display
-  const displayedArticles = (articlesData?.items || []).filter((art) => {
-    // 1. Sentiment filter check
-    if (selectedSentiment && art.sentiment_label?.toLowerCase() !== selectedSentiment.toLowerCase()) {
-      return false;
-    }
-    // 2. Ticker filter check
-    if (selectedTicker && !art.tickers.map((t) => t.toUpperCase()).includes(selectedTicker.toUpperCase())) {
-      return false;
-    }
-    // 3. Search query check
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchTitle = art.title.toLowerCase().includes(q);
-      const matchSummary = art.summary ? art.summary.toLowerCase().includes(q) : false;
-      const matchKeywords = art.keywords ? art.keywords.some((k) => k.toLowerCase().includes(q)) : false;
-      if (!matchTitle && !matchSummary && !matchKeywords) {
-        return false;
-      }
-    }
-    return true;
-  });
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    setCurrentPage(1);
+    const params = new URLSearchParams(searchParams);
+    if (val.trim()) params.set('keyword', val.trim());
+    else params.delete('keyword');
+    setSearchParams(params);
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSearchQuery(tag);
+    setCurrentPage(1);
+    const params = new URLSearchParams(searchParams);
+    params.set('keyword', tag);
+    setSearchParams(params);
+  };
+
+  const totalPages = articlesData?.total_pages || 1;
+  const totalCount = articlesData?.total || 0;
+  const pageItems = articlesData?.items || [];
 
   return (
     <div className="space-y-6 pb-12">
@@ -108,27 +109,30 @@ export const NewsFeedPage: React.FC = () => {
       {/* Multi-Criteria Filter Toolbar */}
       <div className="bg-surface border border-border-subtle rounded-2xl p-4 shadow-sm space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Sentiment Filter Pills */}
+          {/* Sentiment Filter Pills (Bullish / Neutral / Bearish) */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-text-muted mr-1">Sentiment:</span>
             {[
               { label: 'All', value: '' },
-              { label: 'Positive', value: 'positive' },
+              { label: 'Bullish', value: 'bullish' },
               { label: 'Neutral', value: 'neutral' },
-              { label: 'Negative', value: 'negative' },
-            ].map((p) => (
-              <button
-                key={p.value}
-                onClick={() => handleSentimentFilter(p.value)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  selectedSentiment.toLowerCase() === p.value.toLowerCase()
-                    ? 'bg-accent-primary text-white shadow-xs'
-                    : 'bg-surface-raised text-text-secondary hover:text-text-primary border border-border-subtle'
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
+              { label: 'Bearish', value: 'bearish' },
+            ].map((p) => {
+              const isSelected = selectedSentiment.toLowerCase() === p.value.toLowerCase();
+              return (
+                <button
+                  key={p.value}
+                  onClick={() => handleSentimentFilter(p.value)}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-accent-primary text-white shadow-xs'
+                      : 'bg-surface-raised text-text-secondary hover:text-text-primary border border-border-subtle'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
           </div>
 
           {/* Ticker Dropdown Filter */}
@@ -156,7 +160,7 @@ export const NewsFeedPage: React.FC = () => {
             type="text"
             placeholder="Search keywords, headlines, or entities..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full pl-9 pr-4 py-2 bg-surface-raised border border-border-subtle rounded-xl text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary transition-colors"
           />
         </div>
@@ -168,8 +172,8 @@ export const NewsFeedPage: React.FC = () => {
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-44 w-full rounded-2xl" />
           ))
-        ) : displayedArticles.length > 0 ? (
-          displayedArticles.map((art) => (
+        ) : pageItems.length > 0 ? (
+          pageItems.map((art) => (
             <div
               key={art.id}
               className="bg-surface border border-border-subtle hover:border-border-strong rounded-2xl p-5 shadow-sm hover:shadow-md transition-all space-y-3"
@@ -235,7 +239,7 @@ export const NewsFeedPage: React.FC = () => {
                   {art.keywords.map((k, idx) => (
                     <span
                       key={idx}
-                      onClick={() => setSearchQuery(k)}
+                      onClick={() => handleTagClick(k)}
                       className="text-[11px] px-2 py-0.5 rounded-md bg-surface-raised text-text-muted hover:text-text-primary border border-border-subtle cursor-pointer transition-colors"
                     >
                       #{k}
@@ -247,30 +251,32 @@ export const NewsFeedPage: React.FC = () => {
           ))
         ) : (
           <div className="text-center py-12 bg-surface rounded-2xl border border-border-subtle text-xs text-text-muted">
-            No articles found matching the current filter criteria.
+            No articles found matching the current search or filter criteria.
           </div>
         )}
       </div>
 
-      {/* Pagination Bar */}
-      {articlesData && articlesData.total_pages > 1 && (
+      {/* Pagination Bar (Always synchronized with search count) */}
+      {articlesData && (
         <div className="flex items-center justify-between px-2 pt-4 border-t border-border-subtle text-xs">
           <span className="text-text-muted font-mono">
-            Page {articlesData.page} of {articlesData.total_pages} ({articlesData.total} articles)
+            Page {currentPage} of {totalPages} ({totalCount} {totalCount === 1 ? 'article' : 'articles'})
           </span>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg bg-surface border border-border-subtle disabled:opacity-40 hover:bg-surface-hover text-text-primary transition-colors cursor-pointer"
+              className="p-2 rounded-lg bg-surface border border-border-subtle disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-hover text-text-primary transition-colors cursor-pointer"
+              title="Previous Page"
             >
               <ChevronLeft size={16} />
             </button>
             <button
-              onClick={() => setCurrentPage(Math.min(articlesData.total_pages, currentPage + 1))}
-              disabled={currentPage >= articlesData.total_pages}
-              className="p-2 rounded-lg bg-surface border border-border-subtle disabled:opacity-40 hover:bg-surface-hover text-text-primary transition-colors cursor-pointer"
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage >= totalPages}
+              className="p-2 rounded-lg bg-surface border border-border-subtle disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-hover text-text-primary transition-colors cursor-pointer"
+              title="Next Page"
             >
               <ChevronRight size={16} />
             </button>

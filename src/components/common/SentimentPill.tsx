@@ -21,16 +21,16 @@ export const SentimentPill: React.FC<SentimentPillProps> = ({
     );
   }
 
-  const isPos = score >= 0.15;
-  const isNeg = score <= -0.15;
+  const isBullish = score >= 0.15 || label?.toLowerCase() === 'bullish' || label?.toLowerCase() === 'positive';
+  const isBearish = score <= -0.15 || label?.toLowerCase() === 'bearish' || label?.toLowerCase() === 'negative';
 
-  const resolvedLabel = label || (isPos ? 'Positive' : (isNeg ? 'Negative' : 'Neutral'));
+  const resolvedLabel = isBullish ? 'Bullish' : isBearish ? 'Bearish' : 'Neutral';
 
   const sizeClasses = size === 'sm' ? 'text-[11px] px-2 py-0.5' : 'text-xs px-2.5 py-1';
 
-  const colorClasses = isPos
+  const colorClasses = isBullish
     ? 'bg-bullish-bg text-bullish border-bullish-border'
-    : isNeg
+    : isBearish
     ? 'bg-bearish-bg text-bearish border-bearish-border'
     : 'bg-neutral-bg text-neutral-brand border-neutral-border';
 
@@ -38,7 +38,7 @@ export const SentimentPill: React.FC<SentimentPillProps> = ({
     <span
       className={`inline-flex items-center gap-1 font-medium rounded-full border ${sizeClasses} ${colorClasses} ${className}`}
     >
-      <span className="capitalize">{resolvedLabel}</span>
+      <span>{resolvedLabel}</span>
       {showScore && (
         <span className="font-mono text-[10px] opacity-80">
           ({score > 0 ? `+${score.toFixed(2)}` : score.toFixed(2)})

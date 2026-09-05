@@ -54,7 +54,7 @@ export const getDashboardSummary = async (range: TimeRange = '7d'): Promise<Dash
     stocks_tracked: 7,
     total_articles: 412,
     overall_market_sentiment: 0.24,
-    overall_sentiment_label: 'positive',
+    overall_sentiment_label: 'bullish',
     stock_with_most_articles: { ticker: 'NVDA', name: 'NVIDIA Corporation', article_count: 128 },
     highest_sentiment_stock: { ticker: 'AAPL', name: 'Apple Inc.', avg_sentiment_score: 0.62, article_count: 84 },
     lowest_sentiment_stock: { ticker: 'TSLA', name: 'Tesla, Inc.', avg_sentiment_score: -0.38, article_count: 92 },
@@ -78,8 +78,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 4.82,
       volume: 68420000,
       market_cap: 3150000000000,
-      sparkline_7d: [121.2, 122.5, 120.8, 123.4, 125.1, 126.0, 128.5],
-      sentiment_24h: { avg_sentiment: 0.58, label: 'positive', news_count: 24 },
+      sparkline_7d: [121.20, 122.50, 120.80, 123.40, 125.10, 126.00, 128.50],
+      sentiment_24h: { avg_sentiment: 0.58, label: 'bullish', news_count: 24 },
       latest_prediction: { direction: 'UP', confidence_score: 0.81, prediction_date: '2026-09-01' },
     },
     {
@@ -90,8 +90,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 0.86,
       volume: 48120000,
       market_cap: 3480000000000,
-      sparkline_7d: [224.1, 225.0, 226.2, 225.8, 227.0, 226.5, 228.45],
-      sentiment_24h: { avg_sentiment: 0.62, label: 'positive', news_count: 18 },
+      sparkline_7d: [224.10, 225.00, 226.20, 225.80, 227.00, 226.50, 228.45],
+      sentiment_24h: { avg_sentiment: 0.62, label: 'bullish', news_count: 18 },
       latest_prediction: { direction: 'UP', confidence_score: 0.75, prediction_date: '2026-09-01' },
     },
     {
@@ -102,8 +102,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 1.15,
       volume: 24310000,
       market_cap: 3320000000000,
-      sparkline_7d: [440.0, 442.5, 441.8, 443.0, 445.1, 444.0, 448.2],
-      sentiment_24h: { avg_sentiment: 0.35, label: 'positive', news_count: 16 },
+      sparkline_7d: [440.00, 442.50, 441.80, 443.00, 445.10, 444.00, 448.20],
+      sentiment_24h: { avg_sentiment: 0.35, label: 'bullish', news_count: 16 },
       latest_prediction: { direction: 'UP', confidence_score: 0.72, prediction_date: '2026-09-01' },
     },
     {
@@ -114,8 +114,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: -2.15,
       volume: 78540000,
       market_cap: 685000000000,
-      sparkline_7d: [228.5, 225.1, 222.4, 220.0, 219.2, 218.0, 215.3],
-      sentiment_24h: { avg_sentiment: -0.38, label: 'negative', news_count: 28 },
+      sparkline_7d: [228.50, 225.10, 222.40, 220.00, 219.20, 218.00, 215.30],
+      sentiment_24h: { avg_sentiment: -0.38, label: 'bearish', news_count: 28 },
       latest_prediction: { direction: 'DOWN', confidence_score: 0.68, prediction_date: '2026-09-01' },
     },
     {
@@ -126,8 +126,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 0.42,
       volume: 22100000,
       market_cap: 2050000000000,
-      sparkline_7d: [162.0, 163.1, 162.8, 164.0, 163.5, 164.2, 164.8],
-      sentiment_24h: { avg_sentiment: 0.18, label: 'positive', news_count: 14 },
+      sparkline_7d: [162.00, 163.10, 162.80, 164.00, 163.50, 164.20, 164.80],
+      sentiment_24h: { avg_sentiment: 0.18, label: 'bullish', news_count: 14 },
       latest_prediction: { direction: 'UP', confidence_score: 0.64, prediction_date: '2026-09-01' },
     },
     {
@@ -138,8 +138,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 2.34,
       volume: 18320000,
       market_cap: 1290000000000,
-      sparkline_7d: [495.0, 498.2, 502.1, 505.0, 508.4, 506.0, 512.1],
-      sentiment_24h: { avg_sentiment: 0.42, label: 'positive', news_count: 22 },
+      sparkline_7d: [495.00, 498.20, 502.10, 505.00, 508.40, 506.00, 512.10],
+      sentiment_24h: { avg_sentiment: 0.42, label: 'bullish', news_count: 22 },
       latest_prediction: { direction: 'UP', confidence_score: 0.78, prediction_date: '2026-09-01' },
     },
     {
@@ -150,7 +150,7 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: -0.65,
       volume: 34100000,
       market_cap: 1940000000000,
-      sparkline_7d: [188.0, 189.2, 187.5, 188.1, 187.0, 186.8, 186.5],
+      sparkline_7d: [188.00, 189.20, 187.50, 188.10, 187.00, 186.80, 186.50],
       sentiment_24h: { avg_sentiment: -0.12, label: 'neutral', news_count: 15 },
       latest_prediction: { direction: 'DOWN', confidence_score: 0.61, prediction_date: '2026-09-01' },
     },
@@ -162,8 +162,8 @@ export const getMarketOverview = async (): Promise<MarketOverviewItem[]> => {
       price_change_pct: 0.75,
       volume: 52100000,
       market_cap: 580000000000,
-      sparkline_7d: [554.0, 556.2, 555.0, 558.1, 560.2, 559.0, 562.1],
-      sentiment_24h: { avg_sentiment: 0.22, label: 'positive', news_count: 45 },
+      sparkline_7d: [554.00, 556.20, 555.00, 558.10, 560.20, 559.00, 562.10],
+      sentiment_24h: { avg_sentiment: 0.22, label: 'bullish', news_count: 45 },
       latest_prediction: { direction: 'UP', confidence_score: 0.70, prediction_date: '2026-09-01' },
     },
   ];
@@ -235,7 +235,7 @@ export const getStockDetail = async (ticker: string, range: TimeRange = '7d'): P
     sentiment_summary: {
       range,
       avg_sentiment: 0.58,
-      sentiment_label: 'positive',
+      sentiment_label: 'bullish',
       total_articles: 128,
       positive_articles: 86,
       neutral_articles: 32,
@@ -256,7 +256,6 @@ export const getStockDetail = async (ticker: string, range: TimeRange = '7d'): P
 };
 
 export const getPriceHistory = async (ticker: string, limit: number = 60): Promise<PriceHistoryItem[]> => {
-  // Generate sample historical series going backwards from today
   const fallback: PriceHistoryItem[] = [];
   const basePrice = ticker.toUpperCase() === 'NVDA' ? 128.50 : 220.00;
   for (let i = limit - 1; i >= 0; i--) {
@@ -300,7 +299,7 @@ export const getTechnicalIndicators = async (ticker: string, limit: number = 60)
       ma5: Math.round((close * 0.98) * 100) / 100,
       ma10: Math.round((close * 0.96) * 100) / 100,
       ma20: Math.round((close * 0.93) * 100) / 100,
-      rsi: Math.round((50 + Math.sin((limit - i) * 0.2) * 20) * 10) / 10,
+      rsi: Math.round((50 + Math.sin((limit - i) * 0.2) * 20) * 100) / 100,
       macd: Math.round((Math.sin((limit - i) * 0.2) * 2.5) * 100) / 100,
       macd_signal: Math.round((Math.sin((limit - i) * 0.2 - 0.3) * 2.0) * 100) / 100,
       close_to_ma5: 0.02,
@@ -330,13 +329,13 @@ export const getStockPrediction = async (ticker: string): Promise<PredictionDeta
     },
     signal: {
       technical_signals: {
-        rsi: { value: 64.2, status: 'NEUTRAL_BULLISH', note: 'Positive momentum without overbought exhaustion' },
+        rsi: { value: 64.20, status: 'NEUTRAL_BULLISH', note: 'Positive momentum without overbought exhaustion' },
         macd: { macd: 2.45, signal: 1.90, crossover: 'BULLISH_CROSSOVER' },
         moving_averages: { ma5: 124.80, ma10: 122.10, ma20: 119.50, alignment: 'PERFECT_BULLISH_STACK' },
       },
       sentiment_signals: {
         overnight_sentiment: 0.58,
-        sentiment_label: 'POSITIVE',
+        sentiment_label: 'BULLISH',
         news_count_overnight: 24,
         sentiment_3d_rolling: 0.52,
         sentiment_momentum: 'ACCELERATING',
@@ -356,11 +355,11 @@ export const getStockPrediction = async (ticker: string): Promise<PredictionDeta
 
 export const getPredictionHistory = async (ticker: string): Promise<PredictionHistoryItem[]> => {
   const fallback: PredictionHistoryItem[] = [
-    { prediction_date: '2026-08-28', predicted_direction: 'UP', confidence_score: 0.76, actual_trade_date: '2026-08-29', actual_price_change_pct: 1.30, actual_direction: 'UP', is_correct: true },
-    { prediction_date: '2026-08-27', predicted_direction: 'DOWN', confidence_score: 0.65, actual_trade_date: '2026-08-28', actual_price_change_pct: -0.85, actual_direction: 'DOWN', is_correct: true },
-    { prediction_date: '2026-08-26', predicted_direction: 'UP', confidence_score: 0.82, actual_trade_date: '2026-08-27', actual_price_change_pct: 2.40, actual_direction: 'UP', is_correct: true },
-    { prediction_date: '2026-08-25', predicted_direction: 'UP', confidence_score: 0.68, actual_trade_date: '2026-08-26', actual_price_change_pct: 0.20, actual_direction: 'UP', is_correct: true },
-    { prediction_date: '2026-08-24', predicted_direction: 'UP', confidence_score: 0.70, actual_trade_date: '2026-08-25', actual_price_change_pct: -0.50, actual_direction: 'DOWN', is_correct: false },
+    { prediction_date: '2026-08-30', predicted_direction: 'UP', confidence_score: 0.78, actual_trade_date: '2026-08-30', actual_price_change_pct: 1.85, actual_direction: 'UP', is_correct: true },
+    { prediction_date: '2026-08-29', predicted_direction: 'UP', confidence_score: 0.76, actual_trade_date: '2026-08-29', actual_price_change_pct: 1.30, actual_direction: 'UP', is_correct: true },
+    { prediction_date: '2026-08-28', predicted_direction: 'DOWN', confidence_score: 0.65, actual_trade_date: '2026-08-28', actual_price_change_pct: -0.85, actual_direction: 'DOWN', is_correct: true },
+    { prediction_date: '2026-08-27', predicted_direction: 'UP', confidence_score: 0.82, actual_trade_date: '2026-08-27', actual_price_change_pct: 2.40, actual_direction: 'UP', is_correct: true },
+    { prediction_date: '2026-08-26', predicted_direction: 'UP', confidence_score: 0.68, actual_trade_date: '2026-08-26', actual_price_change_pct: 0.20, actual_direction: 'UP', is_correct: true },
   ];
 
   return fetchApi(async () => {
@@ -376,7 +375,8 @@ export const getArticles = async (
   ticker?: string,
   sentimentLabel?: string,
   page: number = 1,
-  pageSize: number = 15
+  pageSize: number = 10,
+  keyword?: string
 ): Promise<PaginatedResponse<ArticleItem>> => {
   const allArticles: ArticleItem[] = [
     {
@@ -388,11 +388,11 @@ export const getArticles = async (
       summary: 'NVIDIA announced accelerating volume shipments of its next-generation Blackwell AI processors to global hyperscalers.',
       tickers: ['NVDA', 'MSFT'],
       sentiment_score: 0.84,
-      sentiment_label: 'positive',
+      sentiment_label: 'bullish',
       bullets: [
         'Mass production of Blackwell processors ramping up ahead of schedule',
         'Key cloud partners expanding compute cluster reservations',
-        'Datacenter gross margins projected above 75%',
+        'Datacenter gross margins projected above 75.00%',
       ],
       keywords: ['Blackwell', 'AI chips', 'datacenter', 'hyperscalers'],
     },
@@ -405,7 +405,7 @@ export const getArticles = async (
       summary: 'Apple has inked multi-billion dollar datacenter server contracts to power upcoming on-device and private cloud intelligence features.',
       tickers: ['AAPL'],
       sentiment_score: 0.62,
-      sentiment_label: 'positive',
+      sentiment_label: 'bullish',
       bullets: [
         'New procurement deal targets private cloud compute expansion',
         'Enhanced Siri and multimodal ecosystem rollout in Q3',
@@ -422,7 +422,7 @@ export const getArticles = async (
       summary: 'Tesla is balancing EV delivery pace with autonomous robotaxi fleet staging across European test regions.',
       tickers: ['TSLA'],
       sentiment_score: -0.38,
-      sentiment_label: 'negative',
+      sentiment_label: 'bearish',
       bullets: [
         'Delivery growth facing competitive EV price pressures',
         'Regulatory timeline for autonomous features under review',
@@ -441,7 +441,7 @@ export const getArticles = async (
       sentiment_score: 0.05,
       sentiment_label: 'neutral',
       bullets: [
-        'Azure revenue maintains 29% annualized growth rate',
+        'Azure revenue maintains 29.00% annualized growth rate',
         'Copilot seat renewals remain steady across enterprise tiers',
       ],
       keywords: ['Microsoft', 'Azure', 'Copilot', 'Cloud'],
@@ -455,9 +455,9 @@ export const getArticles = async (
       summary: 'Google Cloud is rolling out TPU v6 clusters to meet expanding customer workload demands.',
       tickers: ['GOOGL'],
       sentiment_score: 0.45,
-      sentiment_label: 'positive',
+      sentiment_label: 'bullish',
       bullets: [
-        'TPU v6 delivers 2.8x efficiency improvements for training workloads',
+        'TPU v6 delivers 2.80x efficiency improvements for training workloads',
         'Enterprise AI customer adoption expands in APAC',
       ],
       keywords: ['Alphabet', 'Google Cloud', 'TPU', 'Machine Learning'],
@@ -467,23 +467,46 @@ export const getArticles = async (
   // Dynamic fallback filtering
   let filtered = allArticles;
   if (ticker) {
-    filtered = filtered.filter((a) => a.tickers.includes(ticker.toUpperCase()));
+    filtered = filtered.filter((a) => a.tickers.map((t) => t.toUpperCase()).includes(ticker.toUpperCase()));
   }
   if (sentimentLabel) {
-    filtered = filtered.filter((a) => a.sentiment_label?.toLowerCase() === sentimentLabel.toLowerCase());
+    const s = sentimentLabel.toLowerCase();
+    if (s === 'bullish' || s === 'positive') {
+      filtered = filtered.filter((a) => a.sentiment_label === 'bullish' || a.sentiment_label === 'positive' || (a.sentiment_score || 0) >= 0.15);
+    } else if (s === 'bearish' || s === 'negative') {
+      filtered = filtered.filter((a) => a.sentiment_label === 'bearish' || a.sentiment_label === 'negative' || (a.sentiment_score || 0) <= -0.15);
+    } else if (s === 'neutral') {
+      filtered = filtered.filter((a) => a.sentiment_label === 'neutral' || ((a.sentiment_score || 0) > -0.15 && (a.sentiment_score || 0) < 0.15));
+    }
+  }
+  if (keyword && keyword.trim()) {
+    const kw = keyword.toLowerCase().trim();
+    filtered = filtered.filter(
+      (a) =>
+        a.title.toLowerCase().includes(kw) ||
+        (a.summary && a.summary.toLowerCase().includes(kw)) ||
+        (a.keywords && a.keywords.some((k) => k.toLowerCase().includes(kw)))
+    );
   }
 
+  // Calculate pagination slices
+  const total = filtered.length;
+  const total_pages = Math.max(1, Math.ceil(total / pageSize));
+  const startIdx = (page - 1) * pageSize;
+  const pageItems = filtered.slice(startIdx, startIdx + pageSize);
+
   const fallback: PaginatedResponse<ArticleItem> = {
-    items: filtered,
-    total: filtered.length,
+    items: pageItems,
+    total,
     page,
     page_size: pageSize,
-    total_pages: Math.max(1, Math.ceil(filtered.length / pageSize)),
+    total_pages,
   };
 
   let url = `/articles?page=${page}&page_size=${pageSize}`;
-  if (ticker) url += `&ticker=${ticker}`;
-  if (sentimentLabel) url += `&sentiment_label=${sentimentLabel}`;
+  if (ticker) url += `&ticker=${encodeURIComponent(ticker)}`;
+  if (sentimentLabel) url += `&sentiment_label=${encodeURIComponent(sentimentLabel)}`;
+  if (keyword) url += `&keyword=${encodeURIComponent(keyword)}`;
 
   return fetchApi(() => apiClient.get(url), fallback);
 };
@@ -556,14 +579,14 @@ export const getBacktestPerformance = async (): Promise<BacktestPerformanceRespo
     market_only_strategy_return_pct: 11.20,
     multimodal_strategy_return_pct: 19.85,
     time_series: [
-      { date: '2026-07-01', benchmark_equity: 100.0, market_only_equity: 100.0, multimodal_equity: 100.0 },
-      { date: '2026-07-08', benchmark_equity: 101.2, market_only_equity: 101.8, multimodal_equity: 103.4 },
-      { date: '2026-07-15', benchmark_equity: 102.5, market_only_equity: 103.1, multimodal_equity: 106.8 },
-      { date: '2026-07-22', benchmark_equity: 101.8, market_only_equity: 102.9, multimodal_equity: 108.5 },
-      { date: '2026-07-29', benchmark_equity: 103.4, market_only_equity: 105.2, multimodal_equity: 111.4 },
-      { date: '2026-08-05', benchmark_equity: 104.8, market_only_equity: 107.0, multimodal_equity: 114.2 },
-      { date: '2026-08-12', benchmark_equity: 106.1, market_only_equity: 108.9, multimodal_equity: 116.8 },
-      { date: '2026-08-19', benchmark_equity: 107.0, market_only_equity: 109.8, multimodal_equity: 118.1 },
+      { date: '2026-07-01', benchmark_equity: 100.00, market_only_equity: 100.00, multimodal_equity: 100.00 },
+      { date: '2026-07-08', benchmark_equity: 101.20, market_only_equity: 101.80, multimodal_equity: 103.40 },
+      { date: '2026-07-15', benchmark_equity: 102.50, market_only_equity: 103.10, multimodal_equity: 106.80 },
+      { date: '2026-07-22', benchmark_equity: 101.80, market_only_equity: 102.90, multimodal_equity: 108.50 },
+      { date: '2026-07-29', benchmark_equity: 103.40, market_only_equity: 105.20, multimodal_equity: 111.40 },
+      { date: '2026-08-05', benchmark_equity: 104.80, market_only_equity: 107.00, multimodal_equity: 114.20 },
+      { date: '2026-08-12', benchmark_equity: 106.10, market_only_equity: 108.90, multimodal_equity: 116.80 },
+      { date: '2026-08-19', benchmark_equity: 107.00, market_only_equity: 109.80, multimodal_equity: 118.10 },
       { date: '2026-08-25', benchmark_equity: 108.45, market_only_equity: 111.20, multimodal_equity: 119.85 },
     ],
   };
@@ -577,7 +600,7 @@ export const getBacktestPerformance = async (): Promise<BacktestPerformanceRespo
 export const getSystemHealth = async (): Promise<SystemHealthResponse> => {
   const fallback: SystemHealthResponse = {
     status: 'healthy',
-    database: { connected: true, engine: 'PostgreSQL 16 / TimescaleDB', latency_ms: 2.4 },
+    database: { connected: true, engine: 'PostgreSQL 16 / TimescaleDB', latency_ms: 2.40 },
     pipeline: {
       last_market_date: '2026-08-31',
       last_news_article_at: '2026-08-31T21:45:00Z',
@@ -614,11 +637,10 @@ export const analyzeCustomText = async (text: string): Promise<AnalyzeTextRespon
     const res = await apiClient.post('/system/analyze-text', { text, extract_bullets: true, extract_keywords: true });
     return res.data.data;
   } catch {
-    // Client-side fallback analysis
-    const isPos = text.toLowerCase().includes('surge') || text.toLowerCase().includes('beat') || text.toLowerCase().includes('profit') || text.toLowerCase().includes('record');
-    const isNeg = text.toLowerCase().includes('drop') || text.toLowerCase().includes('miss') || text.toLowerCase().includes('loss') || text.toLowerCase().includes('lawsuit');
+    const isPos = text.toLowerCase().includes('surge') || text.toLowerCase().includes('beat') || text.toLowerCase().includes('profit') || text.toLowerCase().includes('record') || text.toLowerCase().includes('bullish');
+    const isNeg = text.toLowerCase().includes('drop') || text.toLowerCase().includes('miss') || text.toLowerCase().includes('loss') || text.toLowerCase().includes('lawsuit') || text.toLowerCase().includes('bearish');
     const score = isPos ? 0.78 : (isNeg ? -0.65 : 0.10);
-    const label = isPos ? 'positive' : (isNeg ? 'negative' : 'neutral');
+    const label = isPos ? 'bullish' : (isNeg ? 'bearish' : 'neutral');
 
     return {
       sentiment_score: score,

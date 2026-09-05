@@ -18,6 +18,7 @@ import {
   CartesianGrid,
   Area,
   ReferenceLine,
+  Legend,
 } from 'recharts';
 import {
   getStockDetail,
@@ -111,6 +112,11 @@ export const StockDetailPage: React.FC = () => {
   const upPct = prediction ? Math.round(prediction.probabilities.probability_up * 100) : 50;
   const downPct = prediction ? Math.round(prediction.probabilities.probability_down * 100) : 50;
 
+  const macdVal = detail?.technical_summary?.macd !== undefined ? detail.technical_summary.macd : 1.75;
+  const macdSig = detail?.technical_summary?.macd_signal !== undefined ? detail.technical_summary.macd_signal : 1.20;
+  const macdDiff = macdVal - macdSig;
+  const isMacdBullish = macdDiff >= 0;
+
   return (
     <div className="space-y-6 pb-12">
       {/* Sticky Stock Header */}
@@ -161,7 +167,7 @@ export const StockDetailPage: React.FC = () => {
                 Closing Price
               </span>
               <div className="text-2xl font-bold font-mono text-text-primary">
-                ${detail?.market_data?.close?.toFixed(2) || '--'}
+                ${detail?.market_data?.close !== undefined ? Number(detail.market_data.close).toFixed(2) : '--'}
               </div>
             </div>
 
@@ -175,7 +181,7 @@ export const StockDetailPage: React.FC = () => {
                 }`}
               >
                 {isPos ? '+' : ''}
-                {detail?.market_data?.price_change_pct?.toFixed(2) || '0.00'}%
+                {detail?.market_data?.price_change_pct !== undefined ? Number(detail.market_data.price_change_pct).toFixed(2) : '0.00'}%
               </div>
             </div>
 
@@ -184,7 +190,7 @@ export const StockDetailPage: React.FC = () => {
                 Volume
               </span>
               <div className="text-base font-mono text-text-primary font-semibold">
-                {detail?.market_data?.volume ? `${(detail.market_data.volume / 1e6).toFixed(1)}M` : '--'}
+                {detail?.market_data?.volume ? `${(Number(detail.market_data.volume) / 1e6).toFixed(2)}M` : '--'}
               </div>
             </div>
 
@@ -193,7 +199,7 @@ export const StockDetailPage: React.FC = () => {
                 Market Cap
               </span>
               <div className="text-base font-mono text-text-primary font-semibold">
-                {detail?.market_data?.market_cap ? `$${(detail.market_data.market_cap / 1e12).toFixed(2)}T` : '--'}
+                {detail?.market_data?.market_cap ? `$${(Number(detail.market_data.market_cap) / 1e12).toFixed(2)}T` : '--'}
               </div>
             </div>
           </div>
@@ -225,8 +231,8 @@ export const StockDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 rounded-xl bg-surface-raised border border-border-subtle mb-5">
           {/* Direction & Confidence */}
           <div className="flex items-center gap-4 border-b md:border-b-0 md:border-r border-border-subtle pb-4 md:pb-0 pr-0 md:pr-4">
-            <div className="w-16 h-16 rounded-2xl bg-surface border border-border-strong flex flex-col items-center justify-center font-mono">
-              <span className="text-xs text-text-muted font-bold">CONF</span>
+            <div className="w-16 h-16 rounded-2xl bg-surface border border-border-strong flex flex-col items-center justify-center font-mono shrink-0">
+              <span className="text-[10px] text-text-muted font-bold">CONF</span>
               <span className="text-lg font-bold text-accent-primary">
                 {prediction ? Math.round(prediction.confidence_score * 100) : 0}%
               </span>
@@ -283,7 +289,7 @@ export const StockDetailPage: React.FC = () => {
               </span>
             </div>
             <div className="text-[11px] text-text-muted mt-1">
-              3D Rolling Window: <span className="font-mono font-semibold text-text-primary">{detail?.sentiment_summary?.sentiment_3d_rolling ? (detail.sentiment_summary.sentiment_3d_rolling > 0 ? `+${detail.sentiment_summary.sentiment_3d_rolling}` : detail.sentiment_summary.sentiment_3d_rolling) : '0.00'}</span>
+              3D Rolling Window: <span className="font-mono font-semibold text-text-primary">{detail?.sentiment_summary?.sentiment_3d_rolling !== undefined ? (detail.sentiment_summary.sentiment_3d_rolling > 0 ? `+${Number(detail.sentiment_summary.sentiment_3d_rolling).toFixed(2)}` : Number(detail.sentiment_summary.sentiment_3d_rolling).toFixed(2)) : '0.00'}</span>
             </div>
           </div>
         </div>
@@ -294,36 +300,69 @@ export const StockDetailPage: React.FC = () => {
             Rule-Based Technical & Sentiment Signals
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="p-3 rounded-xl bg-surface-raised border border-border-subtle text-xs">
-              <span className="text-text-muted font-semibold">RSI Momentum</span>
-              <div className="font-mono font-bold text-text-primary text-sm mt-0.5">
-                {detail?.technical_summary?.rsi?.toFixed(1) || '64.2'}
+            {/* RSI Card */}
+            <div className="p-3.5 rounded-xl bg-surface-raised border border-border-subtle text-xs flex flex-col justify-between">
+              <div>
+                <span className="text-text-muted font-semibold">RSI Momentum (14)</span>
+                <div className="font-mono font-bold text-text-primary text-sm mt-1">
+                  {detail?.technical_summary?.rsi !== undefined ? Number(detail.technical_summary.rsi).toFixed(2) : '64.20'}
+                </div>
               </div>
-              <span className="text-[11px] text-bullish font-medium">Neutral-Bullish momentum</span>
+              <span className="text-[11px] text-bullish font-medium mt-1">
+                {(detail?.technical_summary?.rsi ?? 64.2) >= 70 ? 'Overbought (Reversal Risk)' : (detail?.technical_summary?.rsi ?? 64.2) <= 30 ? 'Oversold (Bounce Potential)' : (detail?.technical_summary?.rsi ?? 64.2) > 50 ? 'Bullish Momentum' : 'Bearish Momentum'}
+              </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-raised border border-border-subtle text-xs">
-              <span className="text-text-muted font-semibold">MACD Signal</span>
-              <div className="font-mono font-bold text-text-primary text-sm mt-0.5">
-                +{detail?.technical_summary?.macd?.toFixed(2) || '2.45'}
+            {/* MACD Card (Explained clearly with Line, Signal, and Diff in USD) */}
+            <div className="p-3.5 rounded-xl bg-surface-raised border border-border-subtle text-xs flex flex-col justify-between" title="MACD measures the dollar spread between 12-day and 26-day exponential moving averages (EMA12 - EMA26).">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-text-muted font-semibold">MACD (12, 26, 9)</span>
+                  <span className="text-[10px] text-text-muted font-mono">USD Spread</span>
+                </div>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className={`font-mono font-bold text-sm ${macdVal >= 0 ? 'text-bullish' : 'text-bearish'}`}>
+                    {macdVal >= 0 ? '+' : ''}{Number(macdVal).toFixed(2)}
+                  </span>
+                  <span className="text-[10px] text-text-muted font-mono">
+                    Sig: {macdSig >= 0 ? '+' : ''}{Number(macdSig).toFixed(2)}
+                  </span>
+                </div>
               </div>
-              <span className="text-[11px] text-bullish font-medium">Bullish crossover active</span>
+              <div className="mt-1 flex items-center justify-between text-[11px]">
+                <span className={`font-semibold ${isMacdBullish ? 'text-bullish' : 'text-bearish'}`}>
+                  {isMacdBullish ? '▲ Golden Cross' : '▼ Death Cross'}
+                </span>
+                <span className="font-mono text-[10px] text-text-muted">
+                  Diff: {macdDiff >= 0 ? '+' : ''}{Number(macdDiff).toFixed(2)}
+                </span>
+              </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-raised border border-border-subtle text-xs">
-              <span className="text-text-muted font-semibold">Moving Averages</span>
-              <div className="font-mono font-bold text-text-primary text-sm mt-0.5">
-                MA5 {detail?.technical_summary?.ma5?.toFixed(1)} &gt; MA20
+            {/* Moving Averages Card */}
+            <div className="p-3.5 rounded-xl bg-surface-raised border border-border-subtle text-xs flex flex-col justify-between">
+              <div>
+                <span className="text-text-muted font-semibold">Moving Averages</span>
+                <div className="font-mono font-bold text-text-primary text-sm mt-1">
+                  MA5 ${detail?.technical_summary?.ma5 !== undefined ? Number(detail.technical_summary.ma5).toFixed(2) : '124.80'}
+                </div>
               </div>
-              <span className="text-[11px] text-bullish font-medium">Perfect bullish stack</span>
+              <span className="text-[11px] text-bullish font-medium mt-1">
+                {(detail?.technical_summary?.ma5 ?? 124.8) > (detail?.technical_summary?.ma20 ?? 119.5) ? 'Bullish Stack (MA5 > MA20)' : 'Bearish (MA5 < MA20)'}
+              </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-raised border border-border-subtle text-xs">
-              <span className="text-text-muted font-semibold">Macro Context</span>
-              <div className="font-mono font-bold text-text-primary text-sm mt-0.5">
-                SPY +0.75% / QQQ +1.20%
+            {/* Macro Context Card */}
+            <div className="p-3.5 rounded-xl bg-surface-raised border border-border-subtle text-xs flex flex-col justify-between">
+              <div>
+                <span className="text-text-muted font-semibold">Macro Context</span>
+                <div className="font-mono font-bold text-text-primary text-sm mt-1">
+                  SPY +0.75% / QQQ +1.20%
+                </div>
               </div>
-              <span className="text-[11px] text-accent-primary font-medium">Risk-on environment</span>
+              <span className="text-[11px] text-accent-primary font-medium mt-1">
+                Strong Market Tailwind (Risk-On)
+              </span>
             </div>
           </div>
         </div>
@@ -376,6 +415,22 @@ export const StockDetailPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Legend Toolbar with explicit color markers */}
+        <div className="flex flex-wrap items-center gap-4 text-xs font-mono px-1">
+          <span className="flex items-center gap-1.5 text-accent-primary font-bold">
+            <span className="w-3.5 h-1 rounded-full bg-accent-primary"></span> Close Price
+          </span>
+          <span className="flex items-center gap-1.5 text-bullish font-semibold">
+            <span className="w-3.5 h-1 rounded-full bg-bullish"></span> MA5 (Fast)
+          </span>
+          <span className="flex items-center gap-1.5 text-amber-500 font-semibold">
+            <span className="w-3.5 h-1 rounded-full bg-amber-500"></span> MA10 (Medium)
+          </span>
+          <span className="flex items-center gap-1.5 text-purple-400 font-semibold">
+            <span className="w-3.5 h-1 rounded-full bg-purple-500"></span> MA20 (Slow)
+          </span>
+        </div>
+
         {/* Main Price & MA Chart */}
         <div className="h-72 w-full">
           {loading ? (
@@ -385,7 +440,7 @@ export const StockDetailPage: React.FC = () => {
               <ComposedChart data={mergedChartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
                 <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} />
-                <YAxis domain={['auto', 'auto']} stroke="var(--text-muted)" fontSize={11} tickLine={false} />
+                <YAxis domain={['auto', 'auto']} stroke="var(--text-muted)" fontSize={11} tickLine={false} tickFormatter={(val) => `$${Number(val).toFixed(2)}`} />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
@@ -393,10 +448,11 @@ export const StockDetailPage: React.FC = () => {
                       return (
                         <div className="bg-surface border border-border-strong p-3 rounded-xl shadow-xl text-xs font-mono space-y-1">
                           <div className="font-bold text-text-primary">{d.date}</div>
-                          <div className="text-text-primary font-bold">Close: ${d.close}</div>
-                          <div className="text-accent-primary">MA5: ${d.ma5}</div>
-                          <div className="text-purple-500">MA20: ${d.ma20}</div>
-                          <div className="text-text-muted">Volume: {d.volume ? `${(d.volume / 1e6).toFixed(1)}M` : '--'}</div>
+                          <div className="text-accent-primary font-bold">Close Price: ${Number(d.close).toFixed(2)}</div>
+                          {d.ma5 !== undefined && <div className="text-bullish">MA5: ${Number(d.ma5).toFixed(2)}</div>}
+                          {d.ma10 !== undefined && <div className="text-amber-500">MA10: ${Number(d.ma10).toFixed(2)}</div>}
+                          {d.ma20 !== undefined && <div className="text-purple-400">MA20: ${Number(d.ma20).toFixed(2)}</div>}
+                          <div className="text-text-muted">Volume: {d.volume ? `${(Number(d.volume) / 1e6).toFixed(2)}M` : '--'}</div>
                         </div>
                       );
                     }
@@ -406,6 +462,7 @@ export const StockDetailPage: React.FC = () => {
                 <Area type="monotone" dataKey="close" fill="var(--accent-primary)" fillOpacity={0.08} stroke="none" />
                 <Line type="monotone" dataKey="close" stroke="var(--accent-primary)" strokeWidth={2.5} dot={false} name="Close Price" />
                 <Line type="monotone" dataKey="ma5" stroke="var(--bullish)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="MA5" />
+                <Line type="monotone" dataKey="ma10" stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="2 2" dot={false} name="MA10" />
                 <Line type="monotone" dataKey="ma20" stroke="#A855F7" strokeWidth={1.5} dot={false} name="MA20" />
               </ComposedChart>
             </ResponsiveContainer>
@@ -416,7 +473,7 @@ export const StockDetailPage: React.FC = () => {
         <div className="pt-2 border-t border-border-subtle">
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="font-semibold text-text-secondary font-mono">RSI Momentum Oscillator (14)</span>
-            <span className="font-mono text-text-muted text-[11px]">Bands: 30 Oversold / 70 Overbought</span>
+            <span className="font-mono text-text-muted text-[11px]">Bands: 30.00 Oversold / 70.00 Overbought</span>
           </div>
           <div className="h-28 w-full">
             {loading ? (
@@ -426,7 +483,7 @@ export const StockDetailPage: React.FC = () => {
                 <ComposedChart data={mergedChartData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
                   <XAxis dataKey="date" hide />
-                  <YAxis domain={[10, 90]} stroke="var(--text-muted)" fontSize={10} tickLine={false} />
+                  <YAxis domain={[10, 90]} stroke="var(--text-muted)" fontSize={10} tickLine={false} tickFormatter={(val) => Number(val).toFixed(2)} />
                   <ReferenceLine y={70} stroke="var(--bearish)" strokeDasharray="3 3" />
                   <ReferenceLine y={30} stroke="var(--bullish)" strokeDasharray="3 3" />
                   <Line type="monotone" dataKey="rsi" stroke="#F59E0B" strokeWidth={2} dot={false} />
@@ -439,7 +496,7 @@ export const StockDetailPage: React.FC = () => {
 
       {/* Historical Track Record & News Split Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Prediction Track Record */}
+        {/* Prediction Track Record (Distinct Unique Dates) */}
         <div className="bg-surface border border-border-subtle rounded-2xl p-5 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -447,11 +504,11 @@ export const StockDetailPage: React.FC = () => {
                 Historical Accuracy Log
               </h2>
               <p className="text-xs text-text-muted">
-                Model forecast vs subsequent actual market outcome
+                1 record per prediction trading day vs subsequent actual outcome
               </p>
             </div>
             <span className="text-xs font-mono font-bold text-bullish bg-bullish-bg px-2.5 py-1 rounded-full border border-bullish-border">
-              80% Hit Rate (Last 5)
+              80.00% Hit Rate (Last 5)
             </span>
           </div>
 
@@ -465,7 +522,7 @@ export const StockDetailPage: React.FC = () => {
                   <th className="py-2.5 px-2 text-right">Result</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border-subtle">
+              <tbody className="divide-y border-border-subtle">
                 {history.map((h, i) => (
                   <tr key={i} className="hover:bg-surface-hover/50">
                     <td className="py-2.5 px-2 text-text-secondary">{h.prediction_date}</td>
@@ -475,7 +532,7 @@ export const StockDetailPage: React.FC = () => {
                     <td className="py-2.5 px-2 font-semibold">
                       <span className={(h.actual_price_change_pct || 0) >= 0 ? 'text-bullish' : 'text-bearish'}>
                         {(h.actual_price_change_pct || 0) >= 0 ? '+' : ''}
-                        {h.actual_price_change_pct?.toFixed(2)}%
+                        {h.actual_price_change_pct !== undefined ? Number(h.actual_price_change_pct).toFixed(2) : '0.00'}%
                       </span>
                     </td>
                     <td className="py-2.5 px-2 text-right">

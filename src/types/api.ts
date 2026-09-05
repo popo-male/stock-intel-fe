@@ -219,7 +219,7 @@ export interface ArticleItem {
   summary?: string;
   tickers: string[];
   sentiment_score?: number;
-  sentiment_label?: 'positive' | 'neutral' | 'negative';
+  sentiment_label?: 'bullish' | 'neutral' | 'bearish' | 'positive' | 'negative';
   bullets: string[];
   keywords: string[];
 }

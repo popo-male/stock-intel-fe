@@ -101,9 +101,6 @@ export const SystemPage: React.FC = () => {
             <h2 className="text-base font-bold text-text-primary">
               FinBERT Sentiment & LLM Bullet Extraction Sandbox
             </h2>
-            <p className="text-xs text-text-muted">
-              Submit custom financial news text or headlines to run real-time inference without database persistence
-            </p>
           </div>
         </div>
 

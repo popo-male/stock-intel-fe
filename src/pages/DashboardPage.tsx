@@ -88,9 +88,6 @@ export const DashboardPage: React.FC = () => {
               Mag 7 + Benchmark
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-text-muted mt-0.5">
-            Real-time market movements combined with FinBERT precision news sentiment and AI predictions.
-          </p>
         </div>
 
         {/* Range Segmented Control */}
@@ -153,9 +150,6 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
             Watchlist Overview
-            <span className="text-xs font-normal text-text-muted">
-              (Live OHLCV + 24h Sentiment + Directional Signal)
-            </span>
           </h2>
         </div>
 
@@ -344,16 +338,13 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Predictions Breakdown Table */}
-      <div className="bg-surface border border-border-subtle rounded-xl p-5 shadow-sm">
+      <div className="bg-surface border border-border-subtle rounded-2xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
               <Sparkles size={18} className="text-accent-primary" />
-              Directional Predictions & Probability Distribution
+              Directional Predictions
             </h2>
-            <p className="text-xs text-text-muted">
-              Next-day forecast evaluated by calibrated multimodal inference model
-            </p>
           </div>
         </div>
 
@@ -361,12 +352,11 @@ export const DashboardPage: React.FC = () => {
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="border-b border-border-subtle text-text-muted uppercase tracking-wider font-semibold">
-                <th className="py-3 px-3">Ticker</th>
+                <th className="py-3 px-4">Asset</th>
                 <th className="py-3 px-3">Direction</th>
-                <th className="py-3 px-3">Confidence</th>
-                <th className="py-3 px-3 text-center">Probability Distribution (UP / DOWN)</th>
+                <th className="py-3 px-4 text-center">Probability Distribution</th>
                 <th className="py-3 px-3">24h Sentiment</th>
-                <th className="py-3 px-3 text-right">Action</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border-subtle">
@@ -378,14 +368,18 @@ export const DashboardPage: React.FC = () => {
                 const downPct = 100 - upPct;
 
                 return (
-                  <tr key={item.ticker} className="hover:bg-surface-hover/50 transition-colors">
-                    <td className="py-3 px-3 font-mono font-bold text-text-primary">
-                      {item.ticker}
-                      <span className="block text-[11px] font-sans font-normal text-text-muted">
-                        {item.name}
-                      </span>
+                  <tr key={item.ticker} className="hover:bg-surface-hover/50 transition-colors group">
+                    <td className="py-3.5 px-4 font-mono font-bold text-text-primary">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-text-primary group-hover:text-accent-primary transition-colors">
+                          {item.ticker}
+                        </span>
+                        <span className="text-[11px] font-sans font-normal text-text-muted truncate max-w-[130px]">
+                          {item.name}
+                        </span>
+                      </div>
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3.5 px-3">
                       {pred ? (
                         <PredictionBadge
                           direction={pred.direction}
@@ -396,11 +390,8 @@ export const DashboardPage: React.FC = () => {
                         <span className="text-text-muted">--</span>
                       )}
                     </td>
-                    <td className="py-3 px-3 font-mono font-semibold">
-                      {pred ? `${Math.round(pred.confidence_score * 100)}%` : '--'}
-                    </td>
-                    <td className="py-3 px-3 text-center">
-                      <div className="flex flex-col items-center justify-center gap-1 mx-auto max-w-[180px]">
+                    <td className="py-3.5 px-4 text-center">
+                      <div className="flex flex-col items-center justify-center gap-1 mx-auto max-w-[170px]">
                         <div className="w-36 h-2.5 flex items-stretch rounded-full overflow-hidden bg-surface-raised border border-border-subtle">
                           <div
                             style={{ width: `${upPct}%` }}
@@ -419,18 +410,18 @@ export const DashboardPage: React.FC = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3.5 px-3">
                       <SentimentPill
                         score={item.sentiment_24h?.avg_sentiment}
                         label={item.sentiment_24h?.label}
                         size="sm"
                       />
                     </td>
-                    <td className="py-3 px-3 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <NavLink
                         to={`/stocks/${item.ticker}`}
                         onClick={() => setSelectedTicker(item.ticker)}
-                        className="inline-flex items-center gap-1 font-mono text-accent-primary hover:underline text-xs"
+                        className="inline-flex items-center gap-1 font-mono text-accent-primary hover:underline text-xs font-semibold"
                       >
                         Deep Dive <ArrowUpRight size={12} />
                       </NavLink>

@@ -100,9 +100,6 @@ export const NewsFeedPage: React.FC = () => {
             <Newspaper size={24} className="text-accent-primary" />
             Financial News & Sentiment Intelligence
           </h1>
-          <p className="text-xs sm:text-sm text-text-muted mt-0.5">
-            FinBERT polarity scoring combined with Groq LLM executive takeaways and entity tagging.
-          </p>
         </div>
       </div>
 

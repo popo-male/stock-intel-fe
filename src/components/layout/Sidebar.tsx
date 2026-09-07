@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileOpen, onCloseMobile })
     { name: 'Stock Deep-Dive', path: `/stocks/${selectedTicker}`, icon: CandlestickChart },
     { name: 'News Intelligence', path: '/news', icon: Newspaper },
     { name: 'Model & Research', path: '/model', icon: FlaskConical },
-    { name: 'AI Sandbox & Status', path: '/system', icon: Cpu },
+    { name: 'AI Sandbox', path: '/system', icon: Cpu },
   ];
 
   return (

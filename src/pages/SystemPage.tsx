@@ -86,11 +86,8 @@ export const SystemPage: React.FC = () => {
       <div>
         <h1 className="text-2xl font-bold text-text-primary tracking-tight flex items-center gap-2">
           <Cpu size={24} className="text-accent-primary" />
-          AI Sandbox & System Operations
+          AI Sandbox
         </h1>
-        <p className="text-xs sm:text-sm text-text-muted mt-0.5">
-          Test real-time FinBERT NLP models on custom text, verify live market proxies, and monitor pipeline health.
-        </p>
       </div>
 
       {/* ON-DEMAND AI NLP SANDBOX */}
@@ -228,9 +225,6 @@ export const SystemPage: React.FC = () => {
               <h2 className="text-base font-bold text-text-primary">
                 ETL Pipeline Freshness & Health
               </h2>
-              <p className="text-xs text-text-muted">
-                Database synchronization timestamps and connection health
-              </p>
             </div>
           </div>
 

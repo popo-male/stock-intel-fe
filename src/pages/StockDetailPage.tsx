@@ -526,17 +526,6 @@ export const StockDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* AI Explanation Takeaway */}
-          <div className="mt-4 p-3.5 rounded-xl bg-accent-primary/5 border border-accent-primary/20 text-xs text-text-primary leading-relaxed flex items-start gap-2.5">
-            <Info size={16} className="text-accent-primary shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-accent-primary">Synthesized Takeaway: </strong>
-              {prediction?.signal?.explanation ||
-                detail?.prediction_summary?.signal_summary ||
-                'Positive momentum supported by overnight news catalysts and strong alignment across scale-invariant moving averages.'}
-            </div>
-          </div>
         </div>
       )}
 
@@ -548,9 +537,6 @@ export const StockDetailPage: React.FC = () => {
               <Layers size={18} className="text-accent-primary" />
               Interactive Price & Technical Indicator Station
             </h2>
-            <p className="text-xs text-text-muted">
-              Most recent {selectedTimeframe} trading days up to latest trade date
-            </p>
           </div>
 
           {/* Timeframe selector */}
@@ -725,9 +711,6 @@ export const StockDetailPage: React.FC = () => {
                   <TrendingUp size={18} className="text-accent-primary" />
                   Historical Accuracy Log
                 </h2>
-                <p className="text-xs text-text-muted">
-                  Daily directional forecasts vs actual closing performance
-                </p>
               </div>
               {hitRate !== null ? (
                 <span
@@ -829,9 +812,6 @@ export const StockDetailPage: React.FC = () => {
                   <Globe2 size={18} className="text-accent-primary" />
                   Latest {currentTicker} News Feed
                 </h2>
-                <p className="text-xs text-text-muted">
-                  FinBERT scored articles with LLM bullet takeaways
-                </p>
               </div>
               <a
                 href={`/news?ticker=${currentTicker}`}

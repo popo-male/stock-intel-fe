@@ -24,6 +24,17 @@ export interface PaginatedResponse<T> {
   total_pages: number;
 }
 
+// Keyword Frequency Item
+export interface KeywordFrequencyItem {
+  keyword: string;
+  frequency: number;
+  sentiment_bias?: number;
+  sentiment_score?: number;
+  bullish_count?: number;
+  bearish_count?: number;
+  neutral_count?: number;
+}
+
 // Dashboard Summary
 export interface DashboardSummary {
   range: string;
@@ -50,10 +61,7 @@ export interface DashboardSummary {
     avg_sentiment_score: number;
     article_count: number;
   } | null;
-  hottest_keyword: {
-    keyword: string;
-    frequency: number;
-  } | null;
+  hottest_keyword: KeywordFrequencyItem | null;
   todays_biggest_gainer: {
     ticker: string;
     name?: string;

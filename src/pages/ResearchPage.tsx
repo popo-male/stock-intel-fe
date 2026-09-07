@@ -68,9 +68,6 @@ export const ResearchPage: React.FC = () => {
           <FlaskConical size={24} className="text-accent-primary" />
           Model Analytics & Research Lab
         </h1>
-        <p className="text-xs sm:text-sm text-text-muted mt-0.5">
-          Evaluating the core research hypothesis: <em>Does incorporating financial news sentiment improve stock trend predictions?</em>
-        </p>
       </div>
 
       {/* HEAD-TO-HEAD COMPARISON SCORECARD */}
@@ -278,9 +275,6 @@ export const ResearchPage: React.FC = () => {
               <TrendingUp size={18} className="text-bullish" />
               Chronological Backtest Performance (Cumulative Strategy Return)
             </h2>
-            <p className="text-xs text-text-muted">
-              Comparing cumulative equity: Benchmark (SPY) vs Market-Only vs Multimodal Strategy
-            </p>
           </div>
           <div className="flex items-center gap-4 text-xs font-mono">
             <span className="text-text-muted">Benchmark: +{backtest ? Number(backtest.benchmark_return_pct).toFixed(2) : '8.45'}%</span>

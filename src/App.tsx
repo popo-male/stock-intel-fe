@@ -6,6 +6,7 @@ import { StockProvider } from './context/StockContext';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { SearchModal } from './components/common/SearchModal';
+import { ServerWarmupBanner } from './components/common/ServerWarmupBanner';
 import { DashboardPage } from './pages/DashboardPage';
 import { StockDetailPage } from './pages/StockDetailPage';
 import { NewsFeedPage } from './pages/NewsFeedPage';
@@ -28,6 +29,9 @@ export const App: React.FC = () => {
 
             {/* Global Search Modal (triggered by / or Cmd+K) */}
             <SearchModal />
+
+            {/* Render Free Tier Cold-Start Status Indicator */}
+            <ServerWarmupBanner />
 
             {/* Body Shell with Sidebar + Main Content */}
             <div className="flex-1 flex max-w-7xl w-full mx-auto">

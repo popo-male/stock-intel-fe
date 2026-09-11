@@ -23,21 +23,37 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 8000,
+  timeout: 90000, // 90s timeout for Render free tier cold-start
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Helper for extracting response envelope
-async function fetchApi<T>(requestFn: () => Promise<{ data: ApiResponse<T> }>, fallbackData: T): Promise<T> {
+// Helper for extracting response envelope with retry capability for Render cold-starts
+async function fetchApi<T>(
+  requestFn: () => Promise<{ data: ApiResponse<T> }>,
+  fallbackData: T,
+  retries: number = 3,
+  delayMs: number = 2500
+): Promise<T> {
   try {
     const response = await requestFn();
     if (response.data && response.data.data !== undefined && response.data.data !== null) {
       return response.data.data;
     }
     return fallbackData;
-  } catch (error) {
+  } catch (error: any) {
+    const isNetworkOrColdStart =
+      !error.response ||
+      error.code === 'ECONNABORTED' ||
+      [502, 503, 504].includes(error.response?.status);
+
+    if (retries > 0 && isNetworkOrColdStart) {
+      console.info(`[Render Warm-up] Server booting, retrying in ${delayMs}ms... (${retries} attempts left)`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      return fetchApi(requestFn, fallbackData, retries - 1, delayMs * 1.5);
+    }
+
     console.warn('API request fallback active:', error);
     return fallbackData;
   }

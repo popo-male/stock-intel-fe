@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { StockProvider } from './context/StockContext';
 import { Header } from './components/layout/Header';
@@ -51,6 +52,7 @@ export const App: React.FC = () => {
             </div>
           </div>
         </BrowserRouter>
+        <Analytics />
       </StockProvider>
     </ThemeProvider>
   );

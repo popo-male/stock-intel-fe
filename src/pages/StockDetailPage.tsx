@@ -12,6 +12,7 @@ import {
   Globe2,
   Clock,
   Activity,
+  CalendarOff,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -777,18 +778,24 @@ export const StockDetailPage: React.FC = () => {
                               {(h.actual_price_change_pct || 0) >= 0 ? '+' : ''}
                               {Number(h.actual_price_change_pct).toFixed(2)}%
                             </span>
+                          ) : h.status === 'MARKET_CLOSED' ? (
+                            <span className="text-text-muted font-normal text-[11px]">Holiday (Closed)</span>
                           ) : (
                             <span className="text-text-muted font-normal">--</span>
                           )}
                         </td>
                         <td className="py-2.5 px-2 text-right">
-                          {h.is_correct === true ? (
+                          {h.status === 'HIT' || h.is_correct === true ? (
                             <span className="inline-flex items-center gap-1 text-bullish font-semibold bg-bullish-bg px-2 py-0.5 rounded-md border border-bullish-border">
                               <CheckCircle2 size={13} /> Hit
                             </span>
-                          ) : h.is_correct === false ? (
+                          ) : h.status === 'MISS' || h.is_correct === false ? (
                             <span className="inline-flex items-center gap-1 text-bearish font-semibold bg-bearish-bg px-2 py-0.5 rounded-md border border-bearish-border">
                               <XCircle size={13} /> Miss
+                            </span>
+                          ) : h.status === 'MARKET_CLOSED' ? (
+                            <span className="inline-flex items-center gap-1 text-text-muted font-medium bg-surface-raised px-2 py-0.5 rounded-md border border-border-subtle" title="Exchange Closed / Market Holiday">
+                              <CalendarOff size={13} /> Closed
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 text-amber-500 font-medium bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/30">

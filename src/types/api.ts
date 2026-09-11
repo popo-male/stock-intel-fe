@@ -215,6 +215,15 @@ export interface PredictionHistoryItem {
   actual_price_change_pct?: number;
   actual_direction?: 'UP' | 'DOWN';
   is_correct?: boolean;
+  status?: 'HIT' | 'MISS' | 'PENDING' | 'MARKET_CLOSED';
+}
+
+export interface PredictionHistoryResponse {
+  ticker: string;
+  total_predictions: number;
+  evaluated_predictions: number;
+  accuracy_pct: number | null;
+  history: PredictionHistoryItem[];
 }
 
 // News Article
